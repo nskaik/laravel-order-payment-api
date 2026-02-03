@@ -37,10 +37,7 @@ class AuthController extends Controller
      *   "user": {
      *     "id": 1,
      *     "name": "John Doe",
-     *     "email": "john@example.com",
-     *     "email_verified_at": null,
-     *     "created_at": "2024-02-03T12:00:00.000000Z",
-     *     "updated_at": "2024-02-03T12:00:00.000000Z"
+     *     "email": "john@example.com"
      *   }
      * }
      *
@@ -75,10 +72,7 @@ class AuthController extends Controller
      *   "user": {
      *     "id": 1,
      *     "name": "John Doe",
-     *     "email": "john@example.com",
-     *     "email_verified_at": null,
-     *     "created_at": "2024-02-03T12:00:00.000000Z",
-     *     "updated_at": "2024-02-03T12:00:00.000000Z"
+     *     "email": "john@example.com"
      *   }
      * }
      *
