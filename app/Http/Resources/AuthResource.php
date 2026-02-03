@@ -8,6 +8,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class AuthResource extends JsonResource
 {
+    /**
+     * The "data" wrapper that should be applied.
+     *
+     * @var string|null
+     */
+    public static $wrap = null;
+
     private string $token;
 
     /**
