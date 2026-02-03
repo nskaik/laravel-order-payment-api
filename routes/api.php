@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,9 +23,6 @@ Route::prefix('auth')->group(function () {
 
 // Protected routes
 Route::middleware('jwt.auth')->group(function () {
-    // Add protected routes here
-    Route::get('/user', function () {
-        return response()->json(auth('api')->user());
-    });
+    Route::get('/user', [UserController::class, 'show']);
 });
 
