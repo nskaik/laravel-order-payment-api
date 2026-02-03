@@ -13,7 +13,7 @@ use Illuminate\Http\JsonResponse;
 class UserController extends Controller
 {
     /**
-     * Get authenticated user
+     * Get an authenticated user
      *
      * Retrieve the currently authenticated user's profile information.
      *
