@@ -1,0 +1,292 @@
+openapi: 3.0.3
+info:
+  title: 'Laravel Order Payment API Documentation'
+  description: 'RESTful API for managing orders and payments with JWT authentication.'
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost:8000'
+tags:
+  -
+    name: Authentication
+    description: "\nAPIs for user authentication including registration and login.\nThese endpoints do not require authentication."
+  -
+    name: User
+    description: "\nAPIs for managing the authenticated user's information."
+components:
+  securitySchemes:
+    default:
+      type: http
+      scheme: bearer
+      description: 'Obtain your JWT token by registering or logging in via the Authentication endpoints. Include the token in the Authorization header as: <code>Bearer {token}</code>'
+security:
+  -
+    default: []
+paths:
+  /api/auth/register:
+    post:
+      summary: 'Register a new user'
+      operationId: registerANewUser
+      description: 'Create a new user account and receive a JWT token for authentication.'
+      parameters: []
+      responses:
+        201:
+          description: 'Successful registration'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2F1dGgvcmVnaXN0ZXIiLCJpYXQiOjE3MDcwMDAwMDAsImV4cCI6MTcwNzAwMzYwMCwibmJmIjoxNzA3MDAwMDAwLCJqdGkiOiJhYmNkZWYxMjM0NTYiLCJzdWIiOiIxIiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.example_signature
+                  user:
+                    id: 1
+                    name: 'John Doe'
+                    email: john@example.com
+                    email_verified_at: null
+                    created_at: '2024-02-03T12:00:00.000000Z'
+                    updated_at: '2024-02-03T12:00:00.000000Z'
+                properties:
+                  token:
+                    type: string
+                    example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2F1dGgvcmVnaXN0ZXIiLCJpYXQiOjE3MDcwMDAwMDAsImV4cCI6MTcwNzAwMzYwMCwibmJmIjoxNzA3MDAwMDAwLCJqdGkiOiJhYmNkZWYxMjM0NTYiLCJzdWIiOiIxIiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.example_signature
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      name:
+                        type: string
+                        example: 'John Doe'
+                      email:
+                        type: string
+                        example: john@example.com
+                      email_verified_at:
+                        type: string
+                        example: null
+                      created_at:
+                        type: string
+                        example: '2024-02-03T12:00:00.000000Z'
+                      updated_at:
+                        type: string
+                        example: '2024-02-03T12:00:00.000000Z'
+        422:
+          description: 'Validation error'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  errors:
+                    email:
+                      - 'The email has already been taken.'
+                    password:
+                      - 'The password field confirmation does not match.'
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      email:
+                        type: array
+                        example:
+                          - 'The email has already been taken.'
+                        items:
+                          type: string
+                      password:
+                        type: array
+                        example:
+                          - 'The password field confirmation does not match.'
+                        items:
+                          type: string
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: "The user's full name. Must not exceed 255 characters."
+                  example: 'John Doe'
+                email:
+                  type: string
+                  description: "The user's email address. Must be unique and valid."
+                  example: john@example.com
+                password:
+                  type: string
+                  description: "The user's password. Must be at least 8 characters."
+                  example: password123
+                password_confirmation:
+                  type: string
+                  description: 'Password confirmation. Must match the password field.'
+                  example: password123
+              required:
+                - name
+                - email
+                - password
+                - password_confirmation
+      security: []
+  /api/auth/login:
+    post:
+      summary: 'Login user'
+      operationId: loginUser
+      description: 'Authenticate a user with email and password to receive a JWT token.'
+      parameters: []
+      responses:
+        200:
+          description: 'Successful login'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE3MDcwMDAwMDAsImV4cCI6MTcwNzAwMzYwMCwibmJmIjoxNzA3MDAwMDAwLCJqdGkiOiJhYmNkZWYxMjM0NTYiLCJzdWIiOiIxIiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.example_signature
+                  user:
+                    id: 1
+                    name: 'John Doe'
+                    email: john@example.com
+                    email_verified_at: null
+                    created_at: '2024-02-03T12:00:00.000000Z'
+                    updated_at: '2024-02-03T12:00:00.000000Z'
+                properties:
+                  token:
+                    type: string
+                    example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE3MDcwMDAwMDAsImV4cCI6MTcwNzAwMzYwMCwibmJmIjoxNzA3MDAwMDAwLCJqdGkiOiJhYmNkZWYxMjM0NTYiLCJzdWIiOiIxIiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.example_signature
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      name:
+                        type: string
+                        example: 'John Doe'
+                      email:
+                        type: string
+                        example: john@example.com
+                      email_verified_at:
+                        type: string
+                        example: null
+                      created_at:
+                        type: string
+                        example: '2024-02-03T12:00:00.000000Z'
+                      updated_at:
+                        type: string
+                        example: '2024-02-03T12:00:00.000000Z'
+        401:
+          description: 'Invalid credentials'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  error: 'Invalid credentials'
+                properties:
+                  error:
+                    type: string
+                    example: 'Invalid credentials'
+        422:
+          description: 'Validation error'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  errors:
+                    email:
+                      - 'The email field is required.'
+                    password:
+                      - 'The password field is required.'
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      email:
+                        type: array
+                        example:
+                          - 'The email field is required.'
+                        items:
+                          type: string
+                      password:
+                        type: array
+                        example:
+                          - 'The password field is required.'
+                        items:
+                          type: string
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: "The user's email address."
+                  example: john@example.com
+                password:
+                  type: string
+                  description: "The user's password."
+                  example: password123
+              required:
+                - email
+                - password
+      security: []
+  /api/user:
+    get:
+      summary: 'Get authenticated user'
+      operationId: getAuthenticatedUser
+      description: "Retrieve the currently authenticated user's profile information."
+      parameters: []
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  name: 'John Doe'
+                  email: john@example.com
+                  email_verified_at: null
+                  created_at: '2024-02-03T12:00:00.000000Z'
+                  updated_at: '2024-02-03T12:00:00.000000Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: 'John Doe'
+                  email:
+                    type: string
+                    example: john@example.com
+                  email_verified_at:
+                    type: string
+                    example: null
+                  created_at:
+                    type: string
+                    example: '2024-02-03T12:00:00.000000Z'
+                  updated_at:
+                    type: string
+                    example: '2024-02-03T12:00:00.000000Z'
+        401:
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - User
