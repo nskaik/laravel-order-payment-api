@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
+| routes are loaded by the "RouteServiceProvider" and all of them will
 | be assigned to the "api" middleware group. Make something great!
 |
 */
@@ -24,5 +25,10 @@ Route::prefix('auth')->group(function () {
 // Protected routes
 Route::middleware('jwt.auth')->group(function () {
     Route::get('/user', [UserController::class, 'show']);
+
+    // Order routes
+    Route::patch('/orders/{id}/confirm', [OrderController::class, 'confirm']);
+    Route::patch('/orders/{id}/cancel', [OrderController::class, 'cancel']);
+    Route::apiResource('orders', OrderController::class);
 });
 
