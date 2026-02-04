@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,12 @@ Route::middleware('jwt.auth')->group(function () {
     // Order routes
     Route::patch('/orders/{id}/confirm', [OrderController::class, 'confirm']);
     Route::patch('/orders/{id}/cancel', [OrderController::class, 'cancel']);
+    Route::get('/orders/{id}/payment', [PaymentController::class, 'showForOrder']);
     Route::apiResource('orders', OrderController::class);
+
+    // Payment routes
+    Route::get('/payments', [PaymentController::class, 'index']);
+    Route::get('/payments/{id}', [PaymentController::class, 'show']);
+    Route::post('/payments', [PaymentController::class, 'store']);
 });
 
