@@ -1,60 +1,182 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Order Payment API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A RESTful API built with Laravel for managing orders and processing payments through multiple payment gateways. This application provides a robust backend solution with JWT-based authentication, comprehensive order management, and an extensible payment processing system.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **JWT-based Authentication** — Secure user registration, login, logout, and token refresh functionality
+- **Order Management** — Full CRUD operations for creating, reading, updating, and deleting orders
+- **Payment Processing** — Extensible gateway system supporting multiple payment providers:
+  - Credit Card payments
+  - PayPal payments
+  - Easily extendable for additional gateways (Stripe, Bank Transfer, etc.)
+- **RESTful API Design** — Clean, consistent API endpoints following REST conventions
+- **Comprehensive API Documentation** — Auto-generated documentation using Scribe
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requirements
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **PHP** ^8.2
+- **Laravel** ^12.0
+- **Composer** 2.x
+- **Node.js** and npm (for frontend assets)
+- **Database** — SQLite (default), MySQL, PostgreSQL, or any Laravel-supported database
+- **PHP Extensions:**
+  - BCMath
 
-## Learning Laravel
+## Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### Quick Setup
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Clone the repository and run the setup command:
 
-## Laravel Sponsors
+```bash
+git clone <repository-url>
+cd laravel-order-payment-api
+composer setup
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+The `composer setup` command will automatically:
+1. Install PHP dependencies
+2. Copy `.env.example` to `.env` (if not exists)
+3. Generate application key
+4. Run database migrations
+5. Install npm dependencies
+6. Build frontend assets
 
-### Premium Partners
+### Manual Setup
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+If you prefer to set up manually:
 
-## Contributing
+```bash
+# Install PHP dependencies
+composer install
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Copy environment file
+cp .env.example .env
 
-## Code of Conduct
+# Generate application key
+php artisan key:generate
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Generate JWT secret
+php artisan jwt:secret
 
-## Security Vulnerabilities
+# Run database migrations
+php artisan migrate
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Install and build frontend assets
+npm install
+npm run build
+```
+
+## Configuration
+
+Configure the following environment variables in your `.env` file:
+
+### Database
+
+```env
+DB_CONNECTION=sqlite
+# For MySQL/PostgreSQL:
+# DB_HOST=127.0.0.1
+# DB_PORT=3306
+# DB_DATABASE=laravel
+# DB_USERNAME=root
+# DB_PASSWORD=
+```
+
+### JWT Authentication
+
+```env
+JWT_SECRET=your-jwt-secret-key
+```
+
+### Payment Gateways
+
+```env
+# Credit Card Gateway
+CREDIT_CARD_API_KEY=
+CREDIT_CARD_SECRET=
+CREDIT_CARD_ENDPOINT=https://api.creditcard-gateway.com
+CREDIT_CARD_TIMEOUT=30
+
+# PayPal Gateway
+PAYPAL_CLIENT_ID=
+PAYPAL_SECRET=
+PAYPAL_MODE=sandbox
+PAYPAL_ENDPOINT=https://api.sandbox.paypal.com
+```
+
+## Running the Application
+
+### Development Server
+
+Start the development server with all services using:
+
+```bash
+composer dev
+```
+
+This command runs concurrently:
+- Laravel development server (`php artisan serve`)
+- Queue worker (`php artisan queue:listen`)
+- Log viewer (`php artisan pail`)
+- Vite development server (`npm run dev`)
+
+### Individual Commands
+
+Alternatively, run services individually:
+
+```bash
+# Start the Laravel server
+php artisan serve
+
+# Start the queue worker (in a separate terminal)
+php artisan queue:listen
+
+# Start Vite for frontend development (in a separate terminal)
+npm run dev
+```
+
+The application will be available at `http://localhost:8000`.
+
+## API Documentation
+
+API documentation is automatically generated using [Scribe](https://scribe.knuckles.wtf/).
+
+### Accessing Documentation
+
+- **HTML Documentation:** [http://localhost:8000/docs](http://localhost:8000/docs)
+- **OpenAPI Specification:** `public/docs/openapi.yaml`
+- **Postman Collection:** `public/docs/collection.json`
+
+### Regenerating Documentation
+
+After making changes to API endpoints, regenerate the documentation:
+
+```bash
+php artisan scribe:generate
+```
+
+## Testing
+
+Run the test suite using:
+
+```bash
+composer test
+```
+
+Or directly with Artisan:
+
+```bash
+php artisan test
+```
+
+## Payment Gateway Integration
+
+The payment system is designed with extensibility in mind, using the Strategy Pattern to support multiple payment providers.
+
+For detailed instructions on adding new payment gateways, see the [Payment Gateway Integration Guide](docs/PAYMENT_GATEWAY_INTEGRATION.md).
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# laravel-order-payment-api
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
